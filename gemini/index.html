@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourire Obligatoire</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        canvas {
+            display: block;
+        }
+        #ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            text-shadow: 0 0 5px rgba(255,255,255,0.8);
+        }
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(50, 50, 50, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #blocker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: opacity 0.5s;
+        }
+        #instructions {
+            text-align: center;
+            color: #222;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #ff6b6b;
+        }
+        p {
+            font-size: 1.2rem;
+        }
+        .key {
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+        }
+        #subtitles {
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ff4757;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #task-tracker {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #ff4757;
+            border-radius: 4px;
+            padding: 12px 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            min-width: 300px;
+            backdrop-filter: blur(8px);
+            color: #333;
+        }
+        #task-tracker h2 {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        #task-tracker .task {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            color: #111;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        #task-tracker .task.completed {
+            color: #888;
+            text-decoration: line-through;
+        }
+        #task-tracker .checkbox {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ff4757;
+            border-radius: 2px;
+            display: inline-block;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        #task-tracker .task.completed .checkbox {
+            background-color: #ff4757;
+            border-color: #ff4757;
+            opacity: 0.5;
+        }
+        #task-tracker .task.completed .checkbox::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 0px;
+            width: 4px;
+            height: 8px;
+            border: solid #111;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        #screamer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: none;
+            z-index: 1000;
+            pointer-events: auto;
+        }
+        #screamer-face {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 40%, #fff 5%, transparent 6%),
+                radial-gradient(circle at 70% 40%, #fff 5%, transparent 6%),
+                radial-gradient(circle at 50% 70%, #000 10%, transparent 15%),
+                #ff0000;
+            filter: contrast(500%) invert(100%);
+            mix-blend-mode: difference;
+            animation: glitch-anim 0.1s infinite;
+        }
+        @keyframes glitch-anim {
+            0% { transform: translate(-50%, -50%) scale(1); filter: hue-rotate(0deg); }
+            20% { transform: translate(-52%, -48%) scale(1.1); filter: hue-rotate(90deg); }
+            40% { transform: translate(-48%, -52%) scale(0.9); filter: hue-rotate(180deg); }
+            60% { transform: translate(-50%, -45%) scale(1.2); filter: hue-rotate(270deg); }
+            80% { transform: translate(-45%, -50%) scale(0.8); filter: hue-rotate(360deg); }
+            100% { transform: translate(-50%, -50%) scale(1); filter: hue-rotate(0deg); }
+        }
+        #end-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            font-size: 2rem;
+            letter-spacing: 5px;
+        }
+        #admin-menu {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff4757;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #admin-menu h3 {
+            margin: 0 0 10px 0;
+            color: #ff4757;
+            text-align: center;
+        }
+        .admin-btn {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .admin-btn:hover {
+            background: #ff4757;
+        }
+    </style>
+</head>
+<body>
+    <div id="screamer">
+        <div id="screamer-face"></div>
+    </div>
+    <div id="end-screen">
+        <p>MERCI POUR VOTRE TRAVAIL.</p>
+    </div>
+    <div id="ui">
+        <div id="task-tracker">
+            <h2>Objectif Actuel</h2>
+            <div id="current-task" class="task">
+                <div class="checkbox"></div>
+                <span id="task-text">Pointer au terminal</span>
+            </div>
+        </div>
+        <div id="crosshair"></div>
+        <div id="subtitles"></div>
+    </div>
+    <div id="blocker">
+        <div id="instructions">
+            <h1>SOURIRE OBLIGATOIRE</h1>
+            <p>Cliquez pour commencer votre journée de travail.</p>
+            <p><br/>
+                Mouvement : <span class="key">Z</span> <span class="key">Q</span> <span class="key">S</span> <span class="key">D</span> ou Flèches<br/>
+                Regard : <span class="key">Souris</span><br/>
+                Courir : <span class="key">Maj</span><br/>
+                Interagir : <span class="key">Clic Gauche</span>
+            </p>
+            <p style="font-size: 0.9rem; margin-top: 30px; color: #666;">Attention : Ce jeu utilise de l'audio spatialisé. Mettez un casque.</p>
+            
+            <div id="admin-menu">
+                <h3>Menu Admin (Téléportation)</h3>
+                <button class="admin-btn" id="btn-tp-start">Début</button>
+                <button class="admin-btn" id="btn-tp-elevator">Ascenseur</button>
+                <button class="admin-btn" id="btn-tp-corrupted">Niveau Corrompu</button>
+                <button class="admin-btn" id="btn-tp-awake">Le Réveil</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RELAIS 7</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas"></canvas>
+      <div id="overlay">
+        <div id="start-screen">
+          <h1>RELAIS 7</h1>
+          <p class="tagline">Maintenez la balise. Ne regardez pas trop longtemps les écrans.</p>
+          <p class="hint">Cliquez pour entrer — ZQSD · Souris · E interagir · F lampe · Échap pause</p>
+          <button id="btn-start" type="button">ENTRER DANS LA CABINE</button>
+        </div>
+        <div id="hud" class="hidden">
+          <div id="battery-bar"><div id="battery-fill"></div></div>
+          <div id="mission-panel">
+            <canvas id="mission-portrait" width="104" height="104"></canvas>
+            <div id="mission-content">
+              <span id="mission-label">CONSIGNE — RELAIS 7</span>
+              <p id="mission-text">Vérifiez la console centrale, puis le casque sur l'étagère du mur gauche. La porte du palier s'ouvrira ensuite.</p>
+            </div>
+          </div>
+          <p id="interaction-hint" class="hidden"></p>
+          <div id="radio-tuner" class="hidden">7.0 MHz</div>
+        </div>
+        <div id="pause-menu" class="hidden">
+          <h2>PAUSE</h2>
+          <p>Sensibilité souris</p>
+          <input id="sensitivity" type="range" min="0.2" max="2" step="0.1" value="0.8" />
+          <button id="btn-skip-exterior" type="button">Aller à l'Acte 3 — Extérieur</button>
+          <button id="btn-skip-undercore" type="button">Aller à l'Acte 4 — Sous la balise</button>
+          <button id="btn-resume" type="button">Reprendre</button>
+        </div>
+        <div id="end-screen" class="hidden">
+          <h1>RELAIS 7</h1>
+          <p class="tagline">
+            Balise 7 — signal rétabli. Technicien 7-Δ enregistré.<br />
+            Vous avez tout appris. Rien n'a changé.<br />
+            Une autre itération vous remplace déjà.
+          </p>
+          <p class="hint">Le grésillement ne s'arrêtera pas.</p>
+        </div>
+        <div id="crt-warning" class="hidden">Ne fixez pas l'écran…</div>
+        <div id="vignette-flash" class="hidden"></div>
+        <div id="screen-fade" class="hidden"></div>
+        <div id="screamer-overlay" class="hidden">
+          <canvas id="screamer-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

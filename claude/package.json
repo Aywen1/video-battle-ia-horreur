@@ -1,0 +1,23 @@
+{
+  "name": "midnight-show",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "L'Émission de Minuit — jeu d'horreur low poly navigateur avec détection de sourire en webcam",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.18",
+    "postprocessing": "^6.36.4",
+    "three": "^0.169.0",
+    "tone": "^15.0.4"
+  },
+  "devDependencies": {
+    "@types/three": "^0.169.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}
