@@ -1,4 +1,4 @@
-# ChatGPT vs Grok vs Gemini vs Claude : créer un jeu d'horreur
+# ChatGPT vs Composer vs Gemini vs Claude : créer un jeu d'horreur
 
 Bienvenue sur le dépôt lié à la vidéo de la chaîne YouTube **[Aywen](https://www.youtube.com/@AywenVideos)** ! 
 
